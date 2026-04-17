@@ -1,0 +1,32 @@
+---
+import { SITE } from '../consts';
+interface Props { compact?: boolean; }
+const { compact = false } = Astro.props;
+---
+{compact ? (
+  <aside class="not-prose my-12 rounded-2xl border hr-soft p-6 md:p-7 bg-paper/50 dark:bg-ink-soft/50 backdrop-blur">
+    <div class="flex flex-wrap items-center gap-5 justify-between">
+      <div class="min-w-0">
+        <p class="text-xs tracking-[0.2em] uppercase opacity-60 mb-2">Try {SITE.name}</p>
+        <p class="text-lg font-semibold tracking-tight">A launcher that does not collect, track, or advertise.</p>
+        <p class="text-sm opacity-75 mt-1">Free. Open source. ~5 MB. No account. No internet permission.</p>
+      </div>
+      <a class="btn-primary shrink-0" href={SITE.playStoreUrl} rel="noopener">Install on Google Play →</a>
+    </div>
+  </aside>
+) : (
+  <section class="container-wide py-20 border-t hr-soft">
+    <div class="rounded-3xl border hr-soft p-10 md:p-14 bg-paper/50 dark:bg-ink-soft/50 backdrop-blur text-center">
+      <p class="text-xs tracking-[0.2em] uppercase opacity-60 mb-4">Get {SITE.name}</p>
+      <h2 class="text-3xl md:text-5xl font-semibold tracking-tight mb-4">Reclaim your home screen.</h2>
+      <p class="opacity-80 max-w-xl mx-auto mb-8">
+        A minimalist Android launcher with zero telemetry, zero ads, and zero excuses.
+        Installs in under ten seconds, works offline forever.
+      </p>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <a class="btn-primary" href={SITE.playStoreUrl} rel="noopener">Install on Google Play →</a>
+        <a class="btn" href={SITE.github} rel="noopener">View source on GitHub</a>
+      </div>
+    </div>
+  </section>
+)}

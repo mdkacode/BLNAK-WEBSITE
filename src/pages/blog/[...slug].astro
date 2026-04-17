@@ -1,6 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AppPromo from '../../components/AppPromo.astro';
+import { SITE } from '../../consts';
 import { getCollection, type CollectionEntry } from 'astro:content';
+import readingTime from 'reading-time';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -9,8 +12,18 @@ export async function getStaticPaths() {
 
 type Props = { post: CollectionEntry<'blog'> };
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 const d = post.data;
+const stats = readingTime(post.body);
+
+const all = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const idx = all.findIndex(p => p.slug === post.slug);
+const prev = all[idx + 1];
+const next = all[idx - 1];
+
+const url = new URL(`/blog/${post.slug}`, Astro.site ?? SITE.url).toString();
+const tweet = `https://twitter.com/intent/tweet?text=${encodeURIComponent(d.title)}&url=${encodeURIComponent(url)}`;
 ---
 <Layout
   title={d.title}
@@ -21,18 +34,93 @@ const d = post.data;
   updatedDate={d.updatedDate}
   tags={d.tags}
 >
-  <article class="container-prose py-20 prose dark:prose-invert prose-headings:tracking-tight">
-    <p class="text-xs tracking-[0.2em] uppercase opacity-60 mb-3">
-      <time datetime={d.pubDate.toISOString()}>
-        {d.pubDate.toLocaleDateString('en', { year:'numeric', month:'long', day:'numeric' })}
-      </time>
-      {d.updatedDate && <> · Updated {d.updatedDate.toLocaleDateString('en', { year:'numeric', month:'long', day:'numeric' })}</>}
-    </p>
-    <h1>{d.title}</h1>
-    <p class="lead opacity-80">{d.description}</p>
-    <hr class="hr-soft" />
-    <Content />
-    <hr class="hr-soft" />
-    <p class="text-sm opacity-70"><a href="/blog">← All posts</a></p>
+  <article class="mx-auto max-w-[680px] px-6 pt-16 pb-10">
+    <header class="mb-10">
+      <p class="text-[11px] tracking-[0.22em] uppercase opacity-60 mb-5 flex flex-wrap gap-x-3 gap-y-1">
+        <time datetime={d.pubDate.toISOString()}>
+          {d.pubDate.toLocaleDateString('en', { year:'numeric', month:'long', day:'numeric' })}
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>{stats.text}</span>
+        {d.tags.length > 0 && <>
+          <span aria-hidden="true">·</span>
+          <span>{d.tags.map(t => `#${t}`).join(' ')}</span>
+        </>}
+      </p>
+      <h1 class="font-sans text-[2.25rem] md:text-[2.75rem] leading-[1.1] tracking-tight font-semibold mb-5">
+        {d.title}
+      </h1>
+      <p class="font-serif text-xl md:text-2xl leading-snug opacity-80 italic">{d.description}</p>
+    </header>
+
+    {d.heroImage && (
+      <img src={d.heroImage} alt={d.title}
+           class="rounded-2xl border hr-soft w-full mb-10"
+           loading="eager" />
+    )}
+
+    <div class="prose prose-lg dark:prose-invert post-body">
+      <Content />
+    </div>
+
+    <footer class="mt-16 pt-8 border-t hr-soft">
+      <div class="flex flex-wrap gap-3 items-center justify-between text-sm">
+        <div class="opacity-70">Found this useful? Share it with someone glued to their phone.</div>
+        <div class="flex gap-3">
+          <a class="btn" href={tweet} rel="noopener" target="_blank">Share on X</a>
+          <a class="btn" href="/rss.xml">RSS</a>
+        </div>
+      </div>
+
+      <AppPromo compact={true} />
+
+      <nav class="mt-10 grid sm:grid-cols-2 gap-4 text-sm">
+        {prev ? (
+          <a href={`/blog/${prev.slug}`} class="block rounded-xl border hr-soft p-4 no-underline hover:border-accent hover:text-accent">
+            <span class="block text-[11px] tracking-[0.18em] uppercase opacity-60 mb-1">← Previous</span>
+            <span class="block font-medium">{prev.data.title}</span>
+          </a>
+        ) : <span />}
+        {next ? (
+          <a href={`/blog/${next.slug}`} class="block rounded-xl border hr-soft p-4 no-underline hover:border-accent hover:text-accent text-right">
+            <span class="block text-[11px] tracking-[0.18em] uppercase opacity-60 mb-1">Next →</span>
+            <span class="block font-medium">{next.data.title}</span>
+          </a>
+        ) : <span />}
+      </nav>
+
+      <p class="mt-10 text-sm"><a href="/blog">← All posts</a></p>
+    </footer>
   </article>
 </Layout>
+
+<style is:global>
+  .post-body { font-family: 'Newsreader', Georgia, serif; }
+  /* Drop cap on the first paragraph */
+  .post-body > p:first-of-type::first-letter {
+    float: left;
+    font-family: 'Newsreader', serif;
+    font-weight: 600;
+    font-size: 3.75rem;
+    line-height: 0.9;
+    padding: 0.35rem 0.6rem 0 0;
+    color: #ff5c2b;
+  }
+  .post-body blockquote {
+    font-family: 'Newsreader', serif;
+    background: linear-gradient(180deg, rgba(255,92,43,0.06), transparent);
+    border-radius: 0.25rem 0.75rem 0.75rem 0.25rem;
+    padding: 0.75rem 1.25rem 0.75rem 1.25rem;
+  }
+  .post-body h2 { margin-top: 2.25em; margin-bottom: 0.5em; }
+  .post-body h2::before {
+    content: '§';
+    color: #ff5c2b;
+    margin-right: 0.5rem;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+  .post-body strong { font-weight: 600; }
+  .post-body hr { margin: 2.5rem 0; border-color: rgba(0,0,0,0.1); }
+  .dark .post-body hr { border-color: rgba(255,255,255,0.1); }
+</style>

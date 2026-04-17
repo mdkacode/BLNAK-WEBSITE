@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import { SITE } from '../consts';
 import { getCollection } from 'astro:content';
+import TrustBadge from '../components/TrustBadge.astro';
+import AppPromo from '../components/AppPromo.astro';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -31,6 +33,8 @@ const features = [
       <a class="btn" href="/features">See how it works</a>
     </div>
   </section>
+
+  <TrustBadge />
 
   <section class="container-wide py-16 border-t hr-soft">
     <h2 class="text-2xl md:text-3xl mb-10">Built on principles, not growth metrics.</h2>
@@ -81,4 +85,6 @@ const features = [
       </ul>
     </section>
   )}
+
+  <AppPromo />
 </Layout>

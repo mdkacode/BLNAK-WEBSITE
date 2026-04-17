@@ -1,0 +1,24 @@
+---
+const items = [
+  { t: 'No data stolen',   d: 'Zero telemetry. No analytics. No network permission — verify it yourself.' },
+  { t: 'No ads shown',     d: 'Not now. Not ever. No sponsored tiles, no recommended apps, no paid placements.' },
+  { t: 'No account needed',d: 'No sign-up, no email, no profile. The app does not know who you are.' },
+  { t: 'Open source',      d: 'Every line is on GitHub under GPL-3.0. Audit it, fork it, trust it.' },
+];
+---
+<section class="container-wide py-16 border-t hr-soft">
+  <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {items.map(i => (
+      <div class="rounded-2xl border hr-soft p-5 bg-paper/40 dark:bg-ink-soft/40 backdrop-blur">
+        <div class="flex items-center gap-2 mb-2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-accent">
+            <path d="M12 2 4 6v6c0 5 3.4 9.1 8 10 4.6-.9 8-5 8-10V6l-8-4Z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          <h3 class="text-[15px] font-semibold tracking-tight">{i.t}</h3>
+        </div>
+        <p class="text-sm opacity-80 leading-relaxed">{i.d}</p>
+      </div>
+    ))}
+  </div>
+</section>
