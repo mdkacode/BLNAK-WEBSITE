@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../consts';
+const updated = '2026-04-18';
+---
+<Layout title="Privacy Policy" description={`How ${SITE.name} handles (and does not handle) your data.`}>
+  <article class="container-prose py-20 prose dark:prose-invert">
+    <h1>Privacy Policy</h1>
+    <p><em>Last updated: {updated}</em></p>
+    <p>
+      {SITE.name} ("we", "our", or "the app") is an Android launcher built with privacy as a core
+      principle. This Privacy Policy explains, in plain language, what information the app does and
+      does not handle. It applies to the {SITE.name} application distributed on Google Play under
+      the package name <code>{SITE.packageName}</code> and to this website.
+    </p>
+
+    <h2>Summary</h2>
+    <ul>
+      <li>We do not collect, transmit, or sell personal data.</li>
+      <li>The app contains no advertising or analytics SDKs.</li>
+      <li>All data the app reads (installed apps, contacts if you grant access, usage counts) stays on your device.</li>
+      <li>The app works offline and does not require an account.</li>
+    </ul>
+
+    <h2>Information processed locally on your device</h2>
+    <p>To function as a launcher, {SITE.name} reads the following information from your device. None of it leaves your device.</p>
+    <ul>
+      <li><strong>Installed applications.</strong> Names, icons, and package identifiers, so you can search and launch them.</li>
+      <li><strong>App launch counts and recency</strong> (optional), used to order search results by relevance. Stored in the app's private storage and deleted when you uninstall.</li>
+      <li><strong>Contacts</strong> (optional, permission-gated). Used only to make contacts searchable from the launcher. Never transmitted.</li>
+      <li><strong>Shortcuts and user preferences.</strong> Pinned apps, tags, themes, and settings are stored in Android's local <code>SharedPreferences</code>.</li>
+    </ul>
+
+    <h2>Permissions we request and why</h2>
+    <ul>
+      <li><strong>QUERY_ALL_PACKAGES / GET_PACKAGES</strong> — to display and launch your installed apps.</li>
+      <li><strong>READ_CONTACTS</strong> (optional) — to search contacts from the launcher. Revocable from Android Settings.</li>
+      <li><strong>CALL_PHONE</strong> (optional) — to place a call directly from a contact result.</li>
+      <li><strong>EXPAND_STATUS_BAR</strong> — to toggle the notification shade via gesture.</li>
+      <li><strong>Accessibility service</strong> (optional) — only if you enable gesture locking; it performs the lock action and reads nothing.</li>
+    </ul>
+    <p>We do not request <strong>INTERNET</strong>. The app cannot make network calls.</p>
+
+    <h2>Data we do not collect</h2>
+    <ul>
+      <li>No personal identifiers, email, phone number, or account.</li>
+      <li>No device identifiers, advertising IDs, or IP addresses.</li>
+      <li>No location data, photos, files, SMS, or call logs.</li>
+      <li>No crash reports or diagnostic telemetry.</li>
+      <li>No cookies or trackers in the app.</li>
+    </ul>
+
+    <h2>Third parties</h2>
+    <p>
+      {SITE.name} integrates with no third-party services, advertising networks, analytics
+      providers, or cloud backends. Google Play itself may collect installation and crash data at
+      the platform level; that data is governed by Google's privacy policy, not ours.
+    </p>
+
+    <h2>Children</h2>
+    <p>
+      {SITE.name} is not directed to children under 13. Because we do not collect any personal
+      information from any user, we do not collect any from children either.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>
+      Because no data leaves your device, there is nothing for us to export or erase on your behalf.
+      You can remove all app data at any time by uninstalling the app or clearing its storage from
+      Android Settings → Apps → {SITE.name} → Storage → Clear data. See also
+      <a href="/account-deletion">Account &amp; Data Deletion</a>.
+    </p>
+
+    <h2>Security</h2>
+    <p>
+      All data remains in Android's app-private sandbox. We recommend enabling device encryption
+      and a screen lock, which Android provides at the OS level.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      If this policy changes, the "Last updated" date above will change. Material changes will be
+      announced on the blog and in release notes. Continued use of the app after an update
+      constitutes acceptance of the revised policy.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions or concerns? Email
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. We are a small, independent project and
+      will respond within a reasonable timeframe.
+    </p>
+  </article>
+</Layout>

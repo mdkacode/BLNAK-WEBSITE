@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../consts';
+
+const faqs = [
+  { q: 'Is BLNAK really free?', a: 'Yes. No ads, no in-app purchases, no tracking. BLNAK is free software, funded by nobody and beholden to nobody.' },
+  { q: 'What data does BLNAK collect?', a: 'None. BLNAK does not include analytics, advertising SDKs, or crash reporters. All app-usage data stays on your device.' },
+  { q: 'Does BLNAK work offline?', a: 'Entirely. BLNAK requires no network connection to function. It never talks to a server because there is no server.' },
+  { q: 'Will BLNAK drain my battery?', a: 'No. BLNAK has no background services and uses fewer resources than the launcher that shipped with your phone.' },
+  { q: 'Is the source code available?', a: 'Yes. BLNAK is open source and the complete source code is published on GitHub under a permissive license.' },
+  { q: 'How do I uninstall BLNAK?', a: 'Long-press the app icon and tap Uninstall, or go to Settings → Apps → BLNAK → Uninstall. Your default launcher will take over immediately.' },
+];
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(f => ({
+    '@type': 'Question', name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<Layout title="Features" description={`Every feature in ${SITE.name}, and every feature we deliberately left out.`}>
+  <article class="container-prose py-20 prose dark:prose-invert prose-headings:tracking-tight">
+    <h1>Features</h1>
+    <p class="lead opacity-80">
+      {SITE.name} is a minimalist Android launcher. This page documents what it does, what it does
+      not do, and why.
+    </p>
+
+    <h2>Search-first navigation</h2>
+    <p>
+      Instead of pages of icons, {SITE.name} opens to a search bar. Start typing and matching apps,
+      contacts, and shortcuts surface instantly. Fuzzy matching means <em>inst</em> finds Instagram,
+      Instacart, or Installer — and the app you launch most often floats to the top over time.
+    </p>
+
+    <h2>A home screen that respects silence</h2>
+    <p>
+      The default home is empty. Not because it is unfinished, but because a home screen works best
+      when <em>you</em> decide what deserves to be there. Pin up to six apps. Or pin none. There is
+      no wallpaper ad, no news feed, no "for you" tab.
+    </p>
+
+    <h2>Built-in tools without the bloat</h2>
+    <ul>
+      <li><strong>Quick toggles</strong> for Wi-Fi, torch, data, hotspot, and silent mode.</li>
+      <li><strong>Tag-based grouping</strong> so work apps, games, and utilities never cross streams.</li>
+      <li><strong>Hibernate</strong> to freeze distracting apps without uninstalling them.</li>
+      <li><strong>Gesture shortcuts</strong> — swipe down for notifications, swipe up for the app drawer, double-tap to lock.</li>
+    </ul>
+
+    <h2>Privacy as a default, not a setting</h2>
+    <p>
+      {SITE.name} has no network permission for analytics, no Firebase, no Crashlytics, no ad SDKs.
+      It does not know how many users it has because it does not ask. App-usage statistics, if you
+      enable them, never leave your device.
+    </p>
+
+    <h2>What BLNAK will never have</h2>
+    <ul>
+      <li>Advertisements, sponsored tiles, or recommended apps.</li>
+      <li>Remote configuration that could change behavior silently.</li>
+      <li>A premium tier. Features are not held hostage.</li>
+      <li>Social integrations that require linking an account.</li>
+    </ul>
+
+    <h2>Accessibility</h2>
+    <p>
+      {SITE.name} supports TalkBack, dynamic font scaling, high-contrast mode, and reduced motion.
+      It works equally well in light and dark themes and obeys your system preference by default.
+    </p>
+
+    <h2 id="faq">Frequently asked questions</h2>
+    {faqs.map(f => (
+      <details class="border hr-soft rounded-xl p-4 my-3">
+        <summary class="cursor-pointer font-medium">{f.q}</summary>
+        <p class="mt-2 opacity-85">{f.a}</p>
+      </details>
+    ))}
+  </article>
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+</Layout>

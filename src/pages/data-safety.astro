@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../consts';
+---
+<Layout title="Data Safety" description={`${SITE.name} Data Safety disclosures, mirroring our Google Play listing.`}>
+  <article class="container-prose py-20 prose dark:prose-invert">
+    <h1>Data Safety</h1>
+    <p>
+      This page mirrors the Data Safety form in our Google Play Console listing so you can verify
+      what is declared there.
+    </p>
+
+    <h2>Data collected</h2>
+    <p><strong>None.</strong> {SITE.name} collects no user data and transmits no user data off the device.</p>
+
+    <h2>Data shared with third parties</h2>
+    <p><strong>None.</strong></p>
+
+    <h2>Security practices</h2>
+    <ul>
+      <li>Data is not encrypted in transit because no data is transmitted.</li>
+      <li>You can request your data be deleted — but there is nothing to delete outside your own device.</li>
+      <li>Committed to Google Play's Families Policy where applicable.</li>
+      <li>Independently validated: the app has no <code>INTERNET</code> permission in its manifest.</li>
+    </ul>
+
+    <h2>Data types a launcher necessarily handles on-device</h2>
+    <table>
+      <thead><tr><th>Type</th><th>Purpose</th><th>Leaves device?</th></tr></thead>
+      <tbody>
+        <tr><td>Installed app list</td><td>Search &amp; launch</td><td>No</td></tr>
+        <tr><td>Contacts (opt-in)</td><td>Search contacts from launcher</td><td>No</td></tr>
+        <tr><td>App usage counts</td><td>Rank search results</td><td>No</td></tr>
+        <tr><td>User preferences</td><td>Remember your settings</td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <p>See also: <a href="/privacy">Privacy Policy</a> · <a href="/account-deletion">Data deletion</a>.</p>
+  </article>
+</Layout>

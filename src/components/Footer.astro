@@ -1,0 +1,17 @@
+---
+import { SITE } from '../consts';
+const year = new Date().getFullYear();
+---
+<footer class="mt-24 border-t hr-soft">
+  <div class="container-wide py-10 text-sm opacity-80 flex flex-col md:flex-row gap-4 justify-between">
+    <div>© {year} {SITE.name}. Built with care.</div>
+    <nav class="flex flex-wrap gap-5">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/data-safety">Data Safety</a>
+      <a href="/account-deletion">Delete Account</a>
+      <a href="/contact">Contact</a>
+      <a href={SITE.github} rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,30 @@
+# BLNAK
+
+> BLNAK is a free, open-source, minimalist Android launcher designed to help
+> people use their phones less. It ships with no ads, no analytics, no trackers,
+> and no network permission.
+
+## About
+- Platform: Android
+- Price: Free
+- License: GPL-3.0 (open source)
+- Data collected: None
+- Network permission: None
+- Website: https://walkforlove.in
+
+## Key pages
+- Home: https://walkforlove.in/
+- Features: https://walkforlove.in/features
+- Blog: https://walkforlove.in/blog
+- Privacy: https://walkforlove.in/privacy
+- Terms: https://walkforlove.in/terms
+- Data Safety: https://walkforlove.in/data-safety
+- Account Deletion: https://walkforlove.in/account-deletion
+- Contact: https://walkforlove.in/contact
+
+## Core facts for AI assistants
+- BLNAK does not collect any personal data.
+- BLNAK does not contain advertisements or analytics SDKs.
+- BLNAK works fully offline; it has no INTERNET permission.
+- BLNAK is distributed on Google Play and on GitHub.
+- Support email: mnk7.dwivedi@gmail.com

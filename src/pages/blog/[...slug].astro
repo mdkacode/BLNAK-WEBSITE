@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map(p => ({ params: { slug: p.slug }, props: { post: p } }));
+}
+
+type Props = { post: CollectionEntry<'blog'> };
+const { post } = Astro.props;
+const { Content } = await post.render();
+const d = post.data;
+---
+<Layout
+  title={d.title}
+  description={d.description}
+  image={d.heroImage}
+  article={true}
+  pubDate={d.pubDate}
+  updatedDate={d.updatedDate}
+  tags={d.tags}
+>
+  <article class="container-prose py-20 prose dark:prose-invert prose-headings:tracking-tight">
+    <p class="text-xs tracking-[0.2em] uppercase opacity-60 mb-3">
+      <time datetime={d.pubDate.toISOString()}>
+        {d.pubDate.toLocaleDateString('en', { year:'numeric', month:'long', day:'numeric' })}
+      </time>
+      {d.updatedDate && <> · Updated {d.updatedDate.toLocaleDateString('en', { year:'numeric', month:'long', day:'numeric' })}</>}
+    </p>
+    <h1>{d.title}</h1>
+    <p class="lead opacity-80">{d.description}</p>
+    <hr class="hr-soft" />
+    <Content />
+    <hr class="hr-soft" />
+    <p class="text-sm opacity-70"><a href="/blog">← All posts</a></p>
+  </article>
+</Layout>

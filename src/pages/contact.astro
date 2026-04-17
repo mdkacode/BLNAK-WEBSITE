@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../consts';
+---
+<Layout title="Contact" description={`Get in touch with the ${SITE.name} team.`}>
+  <article class="container-prose py-20 prose dark:prose-invert">
+    <h1>Contact</h1>
+    <p>
+      {SITE.name} is a small, independent project. The fastest way to reach us is email.
+    </p>
+    <ul>
+      <li><strong>Support &amp; general:</strong> <a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+      <li><strong>Privacy questions:</strong> <a href={`mailto:${SITE.email}?subject=Privacy`}>{SITE.email}</a></li>
+      <li><strong>Bug reports &amp; feature requests:</strong> open an issue on <a href={SITE.github} rel="noopener">GitHub</a>.</li>
+    </ul>
+    <p>We usually reply within a few days.</p>
+  </article>
+</Layout>

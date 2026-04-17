@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const features = [
+  { t: 'Search-first', d: 'Type two letters, launch. No swiping through pages of icons you never open.' },
+  { t: 'Zero telemetry', d: 'No analytics, no ads, no tracking SDKs. Your launcher should not be a product.' },
+  { t: 'Fast on anything', d: 'Runs smoothly on 5-year-old phones. Under 5 MB install size.' },
+  { t: 'Open source', d: 'Every line is auditable on GitHub. Forever.' },
+  { t: 'Mindful defaults', d: 'A blank home screen by default. You decide what deserves a shortcut.' },
+  { t: 'Dark & light', d: 'System-aware themes. Effortlessly readable at 3 a.m. or noon.' },
+];
+---
+<Layout title={SITE.name} description={SITE.description}>
+  <section class="container-wide pt-20 pb-24 text-center">
+    <p class="text-xs tracking-[0.2em] uppercase opacity-60 mb-6">Android launcher · Free · Open source</p>
+    <h1 class="text-5xl md:text-7xl font-semibold tracking-tighter leading-[1.05] mb-6">
+      A quiet launcher<br/>for a loud world.
+    </h1>
+    <p class="max-w-xl mx-auto text-lg opacity-80 mb-10">
+      {SITE.name} replaces noise with intent. A minimalist Android home screen designed to help you
+      use your phone less — not more.
+    </p>
+    <div class="flex flex-wrap gap-3 justify-center">
+      <a class="btn-primary" href={SITE.playStoreUrl} rel="noopener">Get it on Google Play →</a>
+      <a class="btn" href="/features">See how it works</a>
+    </div>
+  </section>
+
+  <section class="container-wide py-16 border-t hr-soft">
+    <h2 class="text-2xl md:text-3xl mb-10">Built on principles, not growth metrics.</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+      {features.map(f => (
+        <div>
+          <h3 class="text-lg mb-2">{f.t}</h3>
+          <p class="opacity-80 text-[15px] leading-relaxed">{f.d}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-wide py-16 border-t hr-soft">
+    <h2 class="text-2xl md:text-3xl mb-8">Screenshots</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {[1,2,3,4,5].map(i => (
+        <img
+          src={`/screens/image${i}.png`}
+          alt={`BLNAK screenshot ${i}`}
+          width="270" height="585" loading="lazy" decoding="async"
+          class="aspect-[9/19.5] w-full object-cover rounded-2xl border hr-soft bg-paper-soft dark:bg-ink-soft"
+        />
+      ))}
+    </div>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="container-wide py-16 border-t hr-soft">
+      <div class="flex items-baseline justify-between mb-8">
+        <h2 class="text-2xl md:text-3xl">From the blog</h2>
+        <a href="/blog" class="text-sm opacity-80 hover:text-accent">All posts →</a>
+      </div>
+      <ul class="divide-y hr-soft">
+        {posts.map(p => (
+          <li class="py-5">
+            <a href={`/blog/${p.slug}`} class="no-underline flex justify-between gap-4 group">
+              <span>
+                <span class="block text-lg group-hover:text-accent">{p.data.title}</span>
+                <span class="block text-sm opacity-70 mt-1">{p.data.description}</span>
+              </span>
+              <time datetime={p.data.pubDate.toISOString()} class="text-xs opacity-60 shrink-0 mt-1">
+                {p.data.pubDate.toLocaleDateString('en', { year:'numeric', month:'short', day:'numeric' })}
+              </time>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</Layout>

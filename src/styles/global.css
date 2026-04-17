@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { color-scheme: light dark; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-paper text-ink antialiased relative;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  .dark body { @apply bg-ink text-paper; }
+  ::selection { @apply bg-accent text-paper; }
+  a { @apply underline-offset-4 decoration-1 hover:decoration-accent; }
+  h1, h2, h3, h4 { @apply tracking-tight font-semibold; }
+
+  /* Futuristic minimalist background: fine grid + soft aurora glows.
+     Fixed, behind everything, pointer-events off, reduced-motion friendly. */
+  body::before,
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+  }
+  /* Grid layer */
+  body::before {
+    background-image:
+      linear-gradient(to right, rgba(10,10,10,0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(10,10,10,0.055) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+  .dark body::before {
+    background-image:
+      linear-gradient(to right, rgba(250,250,250,0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(250,250,250,0.06) 1px, transparent 1px);
+  }
+  /* Aurora/glow layer */
+  body::after {
+    background:
+      radial-gradient(600px 420px at 15% 10%, rgba(255,92,43,0.10), transparent 60%),
+      radial-gradient(700px 500px at 85% 5%, rgba(80,120,255,0.10), transparent 60%),
+      radial-gradient(800px 600px at 50% 110%, rgba(120,80,255,0.08), transparent 60%);
+    animation: auroraDrift 18s ease-in-out infinite alternate;
+    filter: blur(2px);
+  }
+  .dark body::after {
+    background:
+      radial-gradient(600px 420px at 15% 10%, rgba(255,92,43,0.18), transparent 60%),
+      radial-gradient(700px 500px at 85% 5%, rgba(80,120,255,0.16), transparent 60%),
+      radial-gradient(800px 600px at 50% 110%, rgba(140,90,255,0.14), transparent 60%);
+  }
+  @keyframes auroraDrift {
+    0%   { transform: translate3d(0, 0, 0) scale(1); }
+    50%  { transform: translate3d(-2%, 1%, 0) scale(1.05); }
+    100% { transform: translate3d(2%, -1%, 0) scale(1.02); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body::after { animation: none; }
+  }
+  /* Keep the header readable on top of the background */
+  header { z-index: 40; }
+}
+
+@layer components {
+  .container-prose { @apply mx-auto max-w-2xl px-6; }
+  .container-wide  { @apply mx-auto max-w-5xl px-6; }
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-full border border-ink/20 dark:border-paper/20
+           px-5 py-2.5 text-sm font-medium transition
+           hover:border-accent hover:text-accent;
+  }
+  .btn-primary {
+    @apply btn bg-ink text-paper dark:bg-paper dark:text-ink border-transparent
+           hover:bg-accent hover:text-paper dark:hover:text-paper;
+  }
+  .hr-soft { @apply border-ink/10 dark:border-paper/10; }
+}

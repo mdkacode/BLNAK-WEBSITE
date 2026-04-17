@@ -1,0 +1,80 @@
+---
+import { SITE } from '../consts';
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+  pubDate?: Date;
+  updatedDate?: Date;
+  tags?: string[];
+  noindex?: boolean;
+}
+const {
+  title,
+  description = SITE.description,
+  image = '/og-default.png',
+  article = false,
+  pubDate,
+  updatedDate,
+  tags = [],
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).toString();
+const ogImage = new URL(image, Astro.site ?? SITE.url).toString();
+const fullTitle = title === SITE.name ? `${SITE.name} — ${SITE.tagline}` : `${title} · ${SITE.name}`;
+
+const jsonLd = article
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description,
+      image: ogImage,
+      datePublished: pubDate?.toISOString(),
+      dateModified: (updatedDate ?? pubDate)?.toISOString(),
+      author: { '@type': 'Organization', name: SITE.author, url: SITE.url },
+      publisher: { '@type': 'Organization', name: SITE.author, url: SITE.url },
+      mainEntityOfPage: canonical,
+      keywords: tags.join(', '),
+    }
+  : {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: SITE.name,
+      description: SITE.description,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Android',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      url: SITE.url,
+      downloadUrl: SITE.playStoreUrl,
+    };
+---
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content={article ? 'article' : 'website'} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={SITE.locale} />
+{pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+{updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+{tags.map((t) => <meta property="article:tag" content={t} />)}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafa" />
+<meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#0a0a0a" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../consts';
+---
+<Layout title="Account & Data Deletion" description={`How to delete any data associated with ${SITE.name}.`}>
+  <article class="container-prose py-20 prose dark:prose-invert">
+    <h1>Account &amp; Data Deletion</h1>
+    <p>
+      Google Play requires every app to publish a way for users to request deletion of their
+      account and data. This page fulfills that requirement.
+    </p>
+
+    <h2>There is no account</h2>
+    <p>
+      {SITE.name} does not have user accounts. You never sign in, never provide an email, and
+      never create a profile. There is no server-side data to delete.
+    </p>
+
+    <h2>Deleting local data</h2>
+    <p>To delete every byte of data {SITE.name} has stored on your device:</p>
+    <ol>
+      <li>Open Android <strong>Settings</strong>.</li>
+      <li>Go to <strong>Apps</strong> → <strong>{SITE.name}</strong>.</li>
+      <li>Tap <strong>Storage &amp; cache</strong> → <strong>Clear storage</strong> to erase all app data.</li>
+      <li>Optionally, tap <strong>Uninstall</strong> to remove the app entirely.</li>
+    </ol>
+
+    <h2>Still want to make a formal request?</h2>
+    <p>
+      Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with the subject
+      "Data deletion request". We will reply confirming that no server-side data exists to delete.
+    </p>
+  </article>
+</Layout>
