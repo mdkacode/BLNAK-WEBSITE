@@ -1,0 +1,53 @@
+---
+title: "BLNAK has no INTERNET permission — and why that matters"
+description: "Most privacy promises are policy. BLNAK's is a property of the binary. Android itself enforces it."
+pubDate: 2026-05-17
+tags: ["security", "privacy"]
+---
+
+Every Android app declares its permissions in a file called `AndroidManifest.xml`. If an app wants
+to talk to the internet, it has to list the `android.permission.INTERNET` permission. Without it,
+the Android operating system itself refuses to open any network socket — no HTTP, no HTTPS, no
+DNS, no background sync, nothing.
+
+**BLNAK does not declare `INTERNET`.** You can verify this yourself in thirty seconds. Open the
+source on GitHub, open `app/src/main/AndroidManifest.xml`, and search for the word "internet". You
+will find one result — a comment explaining why it is deliberately absent.
+
+> This is not a promise. It is a constraint that Android enforces for us, whether we like it or not.
+
+## What this guarantees
+
+Because Android refuses network calls for apps without the permission, a huge class of privacy
+violations becomes *physically impossible* in BLNAK:
+
+- The app cannot send analytics events.
+- The app cannot upload crash reports.
+- The app cannot phone home to check licensing.
+- The app cannot load ads.
+- The app cannot sync your preferences to a cloud account.
+- The app cannot tell a third party which apps you have installed.
+
+None of the above is a feature we chose not to build. Even if a malicious contributor snuck code
+into a future release, Android would silently block every network attempt until the permission
+was added — which would require a new release, a changed manifest, and a very public question:
+*why does a launcher suddenly need the internet?*
+
+## Verification in three ways
+
+1. **Read the manifest.** Public, on GitHub, human-readable.
+2. **Read the Play Store listing.** Google lists every declared permission under "See more" on
+   every app page. Compare BLNAK's list to a typical launcher's.
+3. **Use a network monitor.** Install a tool like NetGuard or PCAPdroid. Let BLNAK run for a
+   week. Check the log. You will see zero outbound connections attributable to `life.marzi.blnak`.
+
+## Why other apps won't do this
+
+Most launchers depend on network access for something — wallpaper sync, app recommendations,
+sponsored tiles, telemetry, A/B testing. Once an app has the permission for even one "good"
+reason, the wall is down and everything else slips in alongside it. The only way to rule out
+network abuse is to rule out network *at all*, at the manifest level. BLNAK does.
+
+This is not a privacy policy. This is not a trust-us promise. This is a property of the binary
+that Android enforces whether we want it to or not. When we say *no outgoing data*, we mean it in
+the strongest sense the operating system provides.

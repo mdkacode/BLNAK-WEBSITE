@@ -1,0 +1,59 @@
+---
+title: "How to verify BLNAK is safe — in under five minutes"
+description: "Don't trust our word. Don't trust any app's word. Here are three independent ways to verify BLNAK does what it says."
+pubDate: 2026-05-20
+tags: ["security", "how-to"]
+---
+
+Privacy claims are cheap. Anyone can put "we respect your data" on a landing page. What matters
+is whether you can verify the claim independently, without needing a degree in reverse
+engineering. For BLNAK, you can — in about five minutes, using tools already on your phone.
+
+## Method 1: check declared permissions
+
+Open **Play Store → BLNAK → About this app → App permissions → See more**.
+
+You should see a short list that does *not* include:
+
+- Internet / Network
+- Location (fine or coarse)
+- Camera
+- Microphone
+- SMS, Call log, or Storage (except scoped media for wallpapers)
+- Advertising ID
+
+If any of those ever appear in a future update, we owe you an explanation in release notes.
+
+## Method 2: monitor network traffic
+
+Install **NetGuard** (free, open source) from F-Droid or Play Store. Enable it, then use BLNAK
+normally for a day. At the end of the day, check NetGuard's log filtered to `life.marzi.blnak`.
+
+> You should see nothing. No IP, no hostname, no bytes. Because BLNAK has no `INTERNET` permission, Android will not even allow a connection attempt.
+
+If you see a single packet, screenshot it and email us. We will either explain it (some Android
+OEMs route system calls through app UIDs in misleading ways) or fix it.
+
+## Method 3: read the source
+
+The entire codebase is on GitHub. You do not have to be a developer to skim it. Two files tell
+you most of what you need:
+
+- **`AndroidManifest.xml`** — the declared permissions. Search for `permission`. Count the lines.
+- **`build.gradle`** — the app's dependencies. Search for `firebase`, `analytics`, `crashlytics`,
+  `appcenter`, `sentry`, `mixpanel`, `amplitude`. You should find none of them.
+
+If you want to go further, search the source for the word `http` or `url`. In a launcher without
+internet, these should only appear in comments or string resources for external links the user
+taps intentionally.
+
+## Why this matters
+
+Most "privacy-respecting" apps fail one or more of these three checks. They declare internet
+permission for "crash reporting", they bundle Firebase "just for push notifications", they
+transmit your installed-app list to a recommendation server. None of this is necessarily evil —
+but none of it is *verifiable* at a glance either.
+
+BLNAK is designed so that a skeptical fifteen-year-old with a phone and a weekend can prove the
+privacy claims in code. That is the bar we think all consumer software should meet. Until it
+does, we will keep publishing how to check ours.

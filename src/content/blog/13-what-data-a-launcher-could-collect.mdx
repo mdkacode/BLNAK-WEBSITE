@@ -1,0 +1,55 @@
+---
+title: "What data a launcher *could* collect — and why BLNAK collects none of it"
+description: "Launchers have privileged access to your entire app list, usage patterns, and contacts. Here is the full scope of what they could exfiltrate — and the list of what BLNAK actually does."
+pubDate: 2026-05-23
+tags: ["security", "privacy"]
+---
+
+A launcher is one of the most privileged apps on your phone. It has to know what apps you have
+installed, which you use most often, and — if you grant permission — your contacts. This
+privileged position is exactly why launcher privacy deserves more scrutiny than, say, calculator
+apps.
+
+Here is the comprehensive list of what a malicious or careless launcher *could* collect about
+you. Every item on this list has been observed in at least one commercial launcher in the wild.
+
+## The full exfiltration menu
+
+- **The complete list of apps installed on your device**, including app package names, version
+  numbers, and install timestamps. This alone is an identifying fingerprint — your app list is as
+  unique to you as a handwriting sample.
+- **App launch counts and timestamps**, which reveal your daily routines, work schedule, and
+  private habits (dating apps, medical apps, finance apps).
+- **Your contacts**, if the app requests and you grant permission.
+- **Your home-screen layout**, which signals preferences advertisers pay for.
+- **Device identifiers** — advertising ID, device model, OS version, carrier, language, timezone.
+- **IP address**, captured on every network request, which provides approximate location.
+- **The widgets you use**, including which news sources, which calendars, which weather providers.
+- **Search queries** you type in the launcher's search bar — essentially a log of your intent.
+- **Screenshot-like data** through accessibility services, if abused.
+
+In 2021, a major Android launcher was caught transmitting the full app list of every user to an
+ad-tech server twice a day. In 2023, another was found logging search queries. These were
+launchers with hundreds of millions of installs. The practice is common enough that Google
+Play's policy now bans it — but detection relies on researchers noticing.
+
+## What BLNAK actually collects
+
+> None. Not a reduced subset. Not an anonymized sample. Not "aggregated analytics". Zero.
+
+- App list: read from Android only, never transmitted.
+- Launch counts: stored in private `SharedPreferences`, cleared on uninstall.
+- Contacts: optional, read-only, never transmitted.
+- Search queries: processed in memory, never logged, never transmitted.
+- Device identifiers: not accessed.
+- IP address: not accessible because BLNAK has no network permission.
+
+## Why we can claim this credibly
+
+Because you can verify it (see the post on verification in this blog). Because the source is
+public. Because the manifest blocks network access at the OS level. And because, as a free
+open-source project, we have no commercial incentive to collect anything — we don't sell ads,
+we don't sell data, we don't have shareholders to please.
+
+The safest data is data that was never collected. BLNAK was designed around exactly that
+principle.

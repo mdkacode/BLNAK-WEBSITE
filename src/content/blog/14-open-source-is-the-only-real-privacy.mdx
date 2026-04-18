@@ -1,0 +1,61 @@
+---
+title: "Open source is the only real privacy"
+description: "A closed-source privacy policy is a promise. Open source is a proof. Here is why BLNAK is GPL-3.0 on purpose."
+pubDate: 2026-05-26
+tags: ["security", "open-source"]
+---
+
+Every closed-source app in the world has a privacy policy. Most of those policies, read
+carefully, grant the company extraordinary latitude over your data — while using reassuring
+language that reads as though they don't. The policies are written by lawyers to protect
+companies, not by engineers to protect you.
+
+Open source inverts this arrangement. When the code is public, the policy is the code.
+
+## The promise vs. the proof
+
+A closed-source promise looks like this:
+
+> "We do not sell your personal information to third parties."
+
+Read carefully, that sentence tells you nothing about:
+
+- Whether data is **shared** (different from sold) with third parties.
+- Whether data is **transferred** to a parent company that then sells it.
+- Whether "personal information" is narrowly defined to exclude your app list, your location, or
+  your device ID.
+- Whether the policy applies to subcontractors and SDK vendors.
+
+An open-source proof looks like this: the source of the app is published. The manifest shows
+which permissions the app has. The dependencies show which SDKs the app bundles. The network
+code — if any exists — shows exactly what leaves the device and where it goes. There are no
+lawyers between the claim and the reality.
+
+> A privacy policy is what a company *says* it does. Source code is what the app *actually* does.
+
+## Why BLNAK is GPL-3.0
+
+BLNAK is licensed under GPL-3.0, not MIT or Apache, for a specific reason: the GPL requires that
+any derivative distribution also be open source. If someone forks BLNAK, adds tracking, and ships
+it to Google Play, they are obligated to publish the tracking code too. The license is a
+contract that makes the next BLNAK also open source, not just this one.
+
+This matters because the biggest risk to privacy-respecting apps is not the original developer —
+it is the acquisition. A closed-source privacy-respecting app can be sold, re-released with
+trackers inserted, and the users never know. A GPL app cannot be silently compromised this way.
+
+## What you can verify right now
+
+- **Full source:** every line is on GitHub.
+- **Build reproducibility:** the app can be built from the published source and will match the
+  Play Store binary (modulo signing).
+- **Dependency tree:** `build.gradle` lists every external library. No Firebase. No analytics.
+  No ad SDKs. No crash reporters.
+- **License:** GPL-3.0, which prevents stealth re-licensing.
+
+## What this costs us
+
+Being open source costs BLNAK the ability to ever charge money, sell data, or ship a "pro
+version". That is the deal. We think it is a good deal. Commercial incentives are, in the end,
+incompatible with the kind of absolute privacy promises we want to make. Open source is how we
+stay honest with ourselves.

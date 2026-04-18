@@ -1,0 +1,71 @@
+---
+title: "The threat model of a launcher (and how BLNAK handles each threat)"
+description: "Security without a threat model is theater. Here is the honest list of what can go wrong with a launcher — and what BLNAK does about each."
+pubDate: 2026-05-29
+tags: ["security", "threat-model"]
+---
+
+"Security" is a word people throw around without specifying what they're protecting against.
+Real security work starts with a **threat model** — a concrete list of who might attack, what
+they want, and how they'd get it. Here is BLNAK's threat model, written plainly.
+
+## Threat 1: Silent data exfiltration by the launcher itself
+
+**Scenario:** The app quietly uploads your installed-app list, usage patterns, or contacts to a
+third-party server for ads or analytics.
+
+**BLNAK's mitigation:** The app has no `INTERNET` permission declared in its manifest. Android
+blocks every network call at the OS level. This is not a promise — it is a property the OS
+enforces. See [BLNAK has no INTERNET permission](/blog/11-blnak-has-no-internet-permission).
+
+## Threat 2: A malicious third-party SDK
+
+**Scenario:** The app includes an advertising SDK, crash reporter, or A/B testing library that
+phones home with user data, even if the app itself does not.
+
+**BLNAK's mitigation:** No such SDKs are included. The `build.gradle` file lists every
+dependency; there are no Firebase, Crashlytics, Google Analytics, Amplitude, Sentry, Mixpanel, or
+ad-network libraries. You can verify this from the public source in under a minute.
+
+## Threat 3: Compromised supply chain (build server, signing key)
+
+**Scenario:** An attacker gets access to the CI server or signing key and pushes a malicious
+update to Play Store.
+
+**BLNAK's mitigation:** Reproducible builds. The app can be rebuilt from the published source
+and the resulting APK matches the one on Play Store (modulo signing). If a malicious release ever
+ships, a community build would diverge, and someone would notice publicly. This is weaker than
+"impossible", but it is much stronger than any closed-source app can offer.
+
+## Threat 4: A hostile fork
+
+**Scenario:** Someone takes BLNAK's code, adds tracking, renames it "BLNAK Pro", and ships it.
+
+**BLNAK's mitigation:** The GPL-3.0 license requires any distribution to be open source. A
+tracker-laden fork would have to publish its tracking code, which researchers and users could
+spot. Trademark clarity around the name "BLNAK" also helps distinguish the real app from forks.
+
+## Threat 5: Device-level compromise (Android exploits, sideloaded apps)
+
+**Scenario:** Malware on the same device reads BLNAK's data via a kernel or Android exploit.
+
+**BLNAK's mitigation:** Out of scope — this is Android's job. But because BLNAK stores so little
+(preferences, launch counts, no credentials), even a total compromise of BLNAK's sandbox yields
+an attacker very little useful data. The best defense against data leakage is not collecting
+data in the first place.
+
+## Threat 6: You lose your phone
+
+**Scenario:** Someone finds your unlocked phone and snoops through your launcher.
+
+**BLNAK's mitigation:** Nothing BLNAK can solve alone — use a device lock screen. But BLNAK
+holds no secrets. Everything it shows is already on the device in Android's system settings.
+
+## What's not in the threat model
+
+BLNAK is not designed to protect against a state-level adversary with root access to your device.
+Nothing in the consumer app space is. If that is your threat model, you need GrapheneOS,
+hardware keys, and operational discipline far beyond what any launcher can offer.
+
+For every threat in scope, though, the answer is the same: **the safest data is data that was
+never collected**. BLNAK is built on exactly that principle, and the rest falls into place.
