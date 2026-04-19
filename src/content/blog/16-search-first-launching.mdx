@@ -1,0 +1,50 @@
+---
+title: "Feature: Search-first launching in BLNAK"
+description: "Type two letters. Launch. That is the entire interaction model. Here is why it beats icon grids, and how BLNAK's fuzzy search actually works."
+pubDate: 2026-04-15
+tags: ["features", "design"]
+---
+
+BLNAK's core interaction is one input and one output: you type, an app launches. There is no
+home-screen grid to scroll through, no folders to open, no app drawer to swipe up. The search bar
+is the launcher.
+
+## How the search ranks results
+
+Type the letter **i**. BLNAK shows every app whose name contains that letter, ranked by:
+
+1. **Exact prefix match** — apps starting with "I" come first.
+2. **Word-boundary match** — "Google **I**mages" ranks above "Inst**i**nct Pro".
+3. **Frequency** — apps you launch often float higher.
+4. **Recency** — apps you launched recently get a small boost.
+
+> By the time you've typed three letters, the app you wanted is almost always at the top. Two letters for the twenty apps you use daily. Three for everything else.
+
+## Why it's fuzzy
+
+Typo tolerance matters more than you'd think on a phone keyboard. Typing *msg* matches
+*Messages*. Typing *gpay* matches *Google Pay*. Typing *insta* matches *Instagram* but also
+*Instacart* — and then the frequency ranker picks the one you actually use.
+
+## What it doesn't do
+
+- It does **not** search your files, SMS, or emails. Those live in their respective apps.
+- It does **not** send queries anywhere. Everything happens on-device in memory.
+- It does **not** log queries. Even to your own device.
+- It does **not** show "suggested" or "trending" apps. The only things in the result list are
+  apps you actually installed.
+
+## Contacts as first-class results
+
+If you grant the optional contacts permission, typing a person's name surfaces them alongside
+apps. Tap to call, message, or open their contact card. This is the only launcher feature that
+reads anything beyond the app list, and it is entirely optional — most users never turn it on.
+
+## The payoff
+
+The search-first model forces a tiny but consequential moment of intent before every launch. You
+have to *name* the app, which means you have to *want* the app. Over weeks, this converts a
+large fraction of what used to be reflexive unlocks into deliberate actions. Install BLNAK and
+watch your unlock count drop without doing anything else.
+
+Search is not just a feature in BLNAK. It is the entire interface.
