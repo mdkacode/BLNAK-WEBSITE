@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { GetStaticPathsOptions, Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  return paginate(posts, { pageSize: 8 });
+}
+
+type Props = { page: Page<CollectionEntry<'blog'>> };
+const { page } = Astro.props;
+
+const pageTitle = page.currentPage === 1 ? 'Blog' : `Blog — page ${page.currentPage}`;
+const pageDescription = page.currentPage === 1
+  ? 'Essays, release notes, and field notes on minimalist technology, digital wellbeing, and mobile privacy.'
+  : `Older posts from the BLNAK blog — page ${page.currentPage} of ${page.lastPage}.`;
+
+const canonical = page.currentPage === 1 ? '/blog' : `/blog/${page.currentPage}`;
+---
+<Layout title={pageTitle} description={pageDescription}>
+  <section class="container-prose py-20">
+    <header class="mb-12">
+      <h1 class="text-4xl md:text-5xl mb-3">Blog</h1>
+      <p class="opacity-80">Essays, release notes, and field notes on minimalist technology.</p>
+      {page.lastPage > 1 && (
+        <p class="text-xs tracking-[0.18em] uppercase opacity-60 mt-4">
+          Page {page.currentPage} of {page.lastPage}
+        </p>
+      )}
+    </header>
+
+    <ul class="divide-y hr-soft">
+      {page.data.map(p => (
+        <li class="py-6">
+          <a href={`/blog/${p.slug}`} class="no-underline group block">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h2 class="text-xl group-hover:text-accent">{p.data.title}</h2>
+              <time datetime={p.data.pubDate.toISOString()} class="text-xs opacity-60 shrink-0">
+                {p.data.pubDate.toLocaleDateString('en', { year:'numeric', month:'short', day:'numeric' })}
+              </time>
+            </div>
+            <p class="opacity-80 text-[15px] mt-1">{p.data.description}</p>
+            {p.data.tags.length > 0 && (
+              <div class="mt-2 flex flex-wrap gap-2">
+                {p.data.tags.map(t => <span class="text-[11px] uppercase tracking-wider opacity-60">#{t}</span>)}
+              </div>
+            )}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    {page.lastPage > 1 && (
+      <nav class="mt-12 flex items-center justify-between gap-4 text-sm" aria-label="Pagination">
+        {page.url.prev
+          ? <a href={page.url.prev} class="btn" rel="prev">← Newer posts</a>
+          : <span></span>}
+
+        <ol class="flex gap-2" aria-label="Page list">
+          {Array.from({ length: page.lastPage }, (_, i) => i + 1).map(n => (
+            <li>
+              <a
+                href={n === 1 ? '/blog' : `/blog/${n}`}
+                aria-current={n === page.currentPage ? 'page' : undefined}
+                class={`inline-flex h-9 min-w-9 px-3 items-center justify-center rounded-full border no-underline text-sm
+                  ${n === page.currentPage
+                    ? 'border-accent text-accent'
+                    : 'hr-soft hover:border-accent hover:text-accent'}`}
+              >{n}</a>
+            </li>
+          ))}
+        </ol>
+
+        {page.url.next
+          ? <a href={page.url.next} class="btn" rel="next">Older posts →</a>
+          : <span></span>}
+      </nav>
+    )}
+  </section>
+</Layout>

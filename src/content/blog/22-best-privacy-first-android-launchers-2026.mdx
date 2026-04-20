@@ -1,0 +1,66 @@
+---
+title: "Best privacy-first Android launchers of 2026: an honest comparison"
+description: "A side-by-side look at the five most-recommended privacy-first Android launchers — Niagara, Olauncher, Kvaesitso, μLauncher, and BLNAK — judged on what they actually do, not what they promise."
+pubDate: 2026-04-20
+tags: ["comparison", "privacy", "launchers"]
+---
+
+If you search *"private Android launcher"* you will find the same five names recommended in
+every thread. But "private" means very different things to each of them. This post is an
+evidence-based comparison across the claims that actually matter: network behavior, bundled
+SDKs, data collection, and whether the code can be audited.
+
+## The criteria
+
+For each launcher we check six things, all verifiable in public sources:
+
+1. **Declares `INTERNET` permission?** The single strongest predictor of whether any data can
+   leave the device.
+2. **Analytics SDK bundled?** Firebase, Google Analytics, Amplitude, Mixpanel, Sentry.
+3. **Ad SDK bundled?** AdMob, Unity Ads, IronSource, etc.
+4. **Source code public?** Closed source means none of the above is independently verifiable.
+5. **License?** Permissive (MIT/Apache) vs copyleft (GPL) affects whether downstream forks can
+   silently strip privacy features.
+6. **Account required?** Any launcher that asks you to sign in has already started collecting
+   data.
+
+## The comparison table
+
+| Launcher | `INTERNET` perm | Analytics | Ads | Source public | License | Account |
+|---|:-:|:-:|:-:|:-:|---|:-:|
+| **BLNAK** | ❌ No | ❌ None | ❌ None | ✅ Yes | GPL-3.0 | ❌ No |
+| Niagara | ✅ Yes | ⚠️ Crashlytics | ❌ None (free) | ❌ No | Proprietary | ❌ No |
+| Olauncher | ✅ Yes | ❌ None | ❌ None | ✅ Yes | Apache-2.0 | ❌ No |
+| Kvaesitso | ✅ Yes | ❌ None | ❌ None | ✅ Yes | Apache-2.0 | ❌ No |
+| μLauncher | ✅ Yes | ❌ None | ❌ None | ✅ Yes | GPL-3.0 | ❌ No |
+
+## What the table shows
+
+**BLNAK is the only launcher in this list that cannot make network calls at all.** Every other
+launcher has the `INTERNET` permission declared — meaning any future version could phone home
+without requiring an obvious permission-prompt change. This does not mean the others are
+malicious; it means their privacy depends on ongoing trust. BLNAK's depends on the manifest.
+
+Closed-source launchers cannot fill the right columns honestly. Niagara is polished and
+well-regarded, but its privacy claims cannot be independently verified beyond what its developers
+publish. If you value verifiability, open source is non-negotiable.
+
+> The safest privacy claim is the one the operating system enforces, not the one the app makes.
+
+## Which is right for you
+
+- **You want the strongest privacy guarantee possible.** Use BLNAK.
+- **You want a rich widget-driven experience and are willing to trust proprietary code.** Niagara.
+- **You want open source with a friendly onboarding and good aesthetics.** Olauncher or
+  Kvaesitso.
+- **You want CLI-style minimalism and do not mind rough edges.** μLauncher.
+
+The good news for privacy-conscious Android users in 2026: several viable options exist, and the
+bottom three rows of the comparison table are mostly green. The ceiling, however, is BLNAK — and
+it is hard to beat an app that literally cannot talk to a network.
+
+## Verification notes
+
+Every claim in the table is sourced from each project's public `AndroidManifest.xml` and
+`build.gradle` (or their Play Store listing, for closed source). If you see a claim change, it
+means the upstream source changed — file an issue and we will update.
